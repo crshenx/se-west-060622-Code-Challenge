@@ -20,6 +20,7 @@ const allCommentsLi = document.getElementsByTagName("li");
 const heartButton = document.getElementById("like-button");
 const likesSpan = document.getElementById("like-count");
 const formId = document.getElementById("comment-form");
+imageTag.setAttribute("type", "hidden");
 
 fetch("http://localhost:3000/images/1")
   .then((res) => res.json())
@@ -36,9 +37,24 @@ function renderData(data) {
   commentsUl.textContent = "";
   commentsArray.forEach((element) => {
     const newComment = document.createElement("li");
+    const deleteComment = document.createElement("button");
     let comment = element.content;
     newComment.textContent = comment;
+    deleteComment.textContent = "delete";
+    deleteComment.addEventListener("click", function deleteFunction(comment) {
+      comment = newComment;
+      comment.remove();
+    });
+    newComment.append(deleteComment);
     commentsUl.append(newComment);
+  });
+  // hide image when clicked
+  imageTag.addEventListener("click", () => {
+    imageTag.hidden = true;
+    const imageAppear = document.createElement("button");
+    imageAppear.textContent = "IMAGE";
+    imageAppear.addEventListener("click", () => (imageTag.hidden = false));
+    titleTag.append(imageAppear);
   });
 }
 
@@ -53,6 +69,13 @@ formId.addEventListener("submit", (e) => {
   e.preventDefault();
   const newComment = document.createElement("li");
   newComment.textContent = formNameInput.value;
+  const deleteComment = document.createElement("button");
+  deleteComment.textContent = "delete";
+  deleteComment.addEventListener("click", function deleteFunction(comment) {
+    comment = newComment;
+    comment.remove();
+  });
   commentsUl.append(newComment);
+  newComment.append(deleteComment);
   e.target.reset();
 });
